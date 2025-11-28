@@ -81,8 +81,71 @@ where snum = 1050;
 ---------------------------------------------------------------------------------------
 --28-11-2025
 
+use retail;
+CREATE TABLE customer (
+cnum INT NOT NULL,
+cname VARCHAR(30) NOT NULL,
+city VARCHAR(30) NOT NULL,
+rating int not null,
+snum int NOT NULL,
+PRIMARY KEY (cnum), -- in case of composite primary key primary key (cnum,cname)
+FOREIGN KEY (snum) REFERENCES salespeople(snum)
+);
+
+select * from customer;
+
+exec sp_help customer; --to get information about table, sp_help is stored procedure
+
+INSERT INTO customer VALUES (2001, 'Hoffman', 'London',100, 1001);
+
+INSERT INTO customer VALUES (2002, 'Giovanni', 'Rome',200, 1003);
+INSERT INTO customer VALUES (2003, 'Liu', 'San Jose',200, 1002);
+INSERT INTO customer VALUES (2004, 'Grass', 'Berlin',300, 1002);
+INSERT INTO customer VALUES (2006, 'Clemens', 'London',100, 1001);
+INSERT INTO customer VALUES (2008, 'Cisneros', 'San Jose',300, 1007);
+INSERT INTO customer VALUES (2007, 'Pereira', 'Rome',100, 1004);
+
+select count(cnum) from customer;
+
+select city,count(cnum) from customer group by city;
+
+--count of cust based on rating
+select rating,count(cnum) from customer group by rating;
+
+--count of cnum based on city and rating:
+select city,rating,count(cnum) from customer group by city,rating;
+
+--where used for original table columns
+--having is used for aggregated data
+select city,count(cnum) from customer 
+group by city having count(cnum)>1;
+
+/* order of execution:
+where on raw data
+group by for aggrgation
+having for grouping aggregatd  data
+*/
+
+select city,count(snum) from salespeople where comm<=0.2
+group by city having count(snum)=1
+
+--order by
+select city from salespeople order by city asc;
+
+select comm from salespeople order by comm desc;
+
+--selecting city in descending order with comm less tham 0.2 and salepeople count equal to 1
+select city, count(snum) as count from salespeople where comm<=0.2
+group by city
+having count(snum)=1
+order by city desc;
+
+--Assignment:
 create database bank;
 use bank;
+
+--age tinyint since uses less space
+--exclude date column for now
 
 CREATE TABLE account (
 account_id VARCHAR(30) NOT NULL,

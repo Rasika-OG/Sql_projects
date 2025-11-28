@@ -1,3 +1,5 @@
+--SQL basics
+
 --create database
 create database retail;
 
